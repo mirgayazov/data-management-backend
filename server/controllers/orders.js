@@ -1,4 +1,4 @@
-import orders from '../models/orders.js'
+import orders from '../models/orders.js';
 
 export const getOrders = (req, res) => {
     orders.getOrders((err, data) => {

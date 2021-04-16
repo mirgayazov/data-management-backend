@@ -1,4 +1,4 @@
-import testers from '../models/testers.js'
+import testers from '../models/testers.js';
 
 export const getTesters = (req, res) => {
     testers.getTesters((err, data) => {

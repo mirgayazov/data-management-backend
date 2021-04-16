@@ -1,7 +1,7 @@
 import db from '../server.js';
 
-const getOrders = (callback) => {
-    db.any('select * from orders')
+const getDevelopers = (callback) => {
+    db.any('select * from developers')
         .then(data => {
             callback(null, data);
         })
@@ -10,7 +10,7 @@ const getOrders = (callback) => {
         });
 };
 
-export default { getOrders, }
+export default { getDevelopers, }
 
 
 
