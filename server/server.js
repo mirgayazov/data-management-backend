@@ -1,10 +1,10 @@
 import { getTesters, findTesterByID } from './controllers/testers.js';
 import { getOrders } from './controllers/orders.js';
 import express, { json, urlencoded } from 'express';
-import _pgp from 'pg-promise'
+import pgPromise from 'pg-promise';
 
-const pgp =  _pgp();
-const pg = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
+const pgp = pgPromise({/* Init Options */});
+const db = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
 const PORT = 3001
 const app = express()
 
@@ -24,7 +24,7 @@ app.get('/testers', getTesters);
 app.get('/testers/:id', findTesterByID);
 app.get('/orders', getOrders);
 
-pg.connect()
+db.connect()
     .then((obj) => {
         console.log(`Congratulations: database connected successfully!`);
         obj.done();
@@ -38,4 +38,4 @@ pg.connect()
         console.log(`App crashed: database connection problem: `, err.message);
     });
 
-export default pg
+export default db
