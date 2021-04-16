@@ -1,7 +1,6 @@
-var pgp = require('pg-promise')(/*options*/);
-var db = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
+import db from '../server.js'
 
-exports.getTesters = (callback) => {
+const getTesters = (callback) => {
     db.any('select * from testers')
         .then(data => {
             callback(null, data);
@@ -11,7 +10,7 @@ exports.getTesters = (callback) => {
         });
 };
 
-exports.findTesterByID = (id, callback) => {
+const findTesterByID = (id, callback) => {
     db.any('select * from testers where personnel_number=$1', id)
         .then(data => {
             callback(null, data);
@@ -20,6 +19,8 @@ exports.findTesterByID = (id, callback) => {
             callback(err, null);
         });
 };
+
+export default { getTesters, findTesterByID, }
 
 // exports.createUser = (user, callback) => {
 //     client.query(

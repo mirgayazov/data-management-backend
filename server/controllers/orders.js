@@ -1,7 +1,7 @@
-const Orders = require('../models/orders');
+import orders from '../models/orders.js'
 
-exports.getOrders = (req, res) => {
-    Orders.getOrders((err, data) => {
+export const getOrders = (req, res) => {
+    orders.getOrders((err, data) => {
         if (err) {
             console.log(err);
             return res.sendStatus(500);

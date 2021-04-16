@@ -1,14 +1,17 @@
-const testersController = require('./controllers/testers');
-const ordersController = require('./controllers/orders');
-const express = require('express')
-const PORT = 3003
+import { getTesters, findTesterByID } from './controllers/testers.js';
+import { getOrders } from './controllers/orders.js';
+import express, { json, urlencoded } from 'express';
+import _pgp from 'pg-promise'
 
+const pgp =  _pgp();
+const pg = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
+const PORT = 3001
 const app = express()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3001");
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     res.setHeader(
         "Access-Control-Allow-Headers",
@@ -17,12 +20,22 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/testers', testersController.getTesters);
-app.get('/testers/:id', testersController.findTesterByID);
+app.get('/testers', getTesters);
+app.get('/testers/:id', findTesterByID);
+app.get('/orders', getOrders);
 
-app.get('/orders', ordersController.getOrders);
+pg.connect()
+    .then((obj) => {
+        console.log(`Congratulations: database connected successfully!`);
+        obj.done();
+    })
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`API server started at: http://localhost:${PORT}`)
+        })
+    })
+    .catch(err => {
+        console.log(`App crashed: database connection problem: `, err.message);
+    });
 
-
-app.listen(PORT, () => {
-    console.log(`API server started at  http://localhost:${PORT}`)
-})
+export default pg

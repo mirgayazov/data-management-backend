@@ -1,7 +1,7 @@
-const Testers = require('../models/testers');
+import testers from '../models/testers.js'
 
-exports.getTesters = (req, res) => {
-    Testers.getTesters((err, data) => {
+export const getTesters = (req, res) => {
+    testers.getTesters((err, data) => {
         if (err) {
             console.log(err);
             return res.sendStatus(500);
@@ -11,8 +11,8 @@ exports.getTesters = (req, res) => {
     });
 };
 
-exports.findTesterByID = (req, res) => {
-    Testers.findTesterByID(req.params.id, (err, data) => {
+export const findTesterByID = (req, res) => {
+    testers.findTesterByID(req.params.id, (err, data) => {
         if (err) {
             console.log(err);
             return res.sendStatus(500);
