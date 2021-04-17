@@ -20,17 +20,18 @@ const findTesterByID = (id, callback) => {
         });
 };
 
-export default { getTesters, findTesterByID, }
 
-// exports.createUser = (user, callback) => {
-//     client.query(
-//         "insert into users(name) values($1)",
-//         [user.name],
-//         (err, results) => {
-//             callback(err, results);
-//         }
-//     );
-// };
+const createTester = (tester, callback) => {
+    db.any('insert into testers(personnel_number, full_name, test_method, work_experience, position, telephone_number, passport_details) values($1, $2, $3, $4, $5, $6, $7)', [Date.now, tester.fullName, '', 5, '', '', ''])
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
+
+export default { getTesters, findTesterByID, createTester }
 
 // exports.updateUserName = (user, newName, callback) => {
 //     client.query(

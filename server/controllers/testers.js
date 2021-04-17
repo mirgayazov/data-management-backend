@@ -21,3 +21,14 @@ export const findTesterByID = (req, res) => {
         }
     });
 };
+
+export const createTester = (req, res) => {
+    testers.createTester(req.body.tester, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+};
