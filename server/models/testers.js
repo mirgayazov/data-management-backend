@@ -22,7 +22,7 @@ const findTesterByID = (id, callback) => {
 
 
 const createTester = (tester, callback) => {
-    db.any('insert into testers(personnel_number, full_name, test_method, work_experience, position, telephone_number, passport_details) values($1, $2, $3, $4, $5, $6, $7)', [Date.now, tester.fullName, '', 5, '', '', ''])
+    db.any('insert into testers(full_name, test_method, work_experience, position, telephone_number, passport_details) values($1, $2, $3, $4, $5, $6)', [tester.fullName, tester.testMethod, Number(tester.workExperience), tester.position, tester.telephoneNumber, tester.passportDetails])
         .then(data => {
             callback(null, data);
         })
@@ -31,20 +31,14 @@ const createTester = (tester, callback) => {
         });
 };
 
-export default { getTesters, findTesterByID, createTester }
+const deleteTester = (pn, callback) => {
+    db.any('delete from testers where personnel_number=$1', Number(pn))
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
 
-// exports.updateUserName = (user, newName, callback) => {
-//     client.query(
-//         "update users set name=$1 where id=$2",
-//         [newName, user.id],
-//         (err, results) => {
-//             callback(err, results);
-//         }
-//     );
-// };
-
-// exports.deleteUser = (user, callback) => {
-//     client.query("delete from users where id=$1", [user.id], (err, results) => {
-//         callback(err, results);
-//     });
-// };
+export default { getTesters, findTesterByID, createTester, deleteTester }

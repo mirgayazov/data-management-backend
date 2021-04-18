@@ -32,3 +32,15 @@ export const createTester = (req, res) => {
         }
     });
 };
+
+export const deleteTester = (req, res) => {
+    console.log(req.body)
+    testers.deleteTester(req.body.pn, (err, data) => {
+        if (err) {  
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+};

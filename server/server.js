@@ -1,4 +1,4 @@
-import { getTesters, findTesterByID, createTester } from './controllers/testers.js';
+import { getTesters, findTesterByID, createTester, deleteTester } from './controllers/testers.js';
 import { getOrders } from './controllers/orders.js';
 import { getDevelopers } from './controllers/developers.js';
 import { getCustomers } from './controllers/customers.js';
@@ -28,6 +28,7 @@ app.get('/orders', getOrders);
 app.get('/developers', getDevelopers);
 app.get('/customers', getCustomers);
 app.post('/testers', createTester);
+app.delete('/testers', deleteTester);
 
 db.connect()
     .then((obj) => {
