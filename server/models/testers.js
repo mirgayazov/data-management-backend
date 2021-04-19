@@ -20,7 +20,6 @@ const findTesterByID = (id, callback) => {
         });
 };
 
-
 const createTester = (tester, callback) => {
     const passportValues = tester.passportDetails.split(' ')
     const passport = {
