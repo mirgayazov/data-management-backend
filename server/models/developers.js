@@ -10,13 +10,38 @@ const getDevelopers = (callback) => {
         });
 };
 
-export default { getDevelopers, }
+const createDeveloper = (developer, callback) => {
+    const passportValues = developer.passportDetails.split(' ')
+    const passport = {
+        series: passportValues[0],
+        number: passportValues[1],
+    }
+    db.any('insert into developers(full_name, work_experience, position, telephone_number, passport_details, salary) values($1, $2, $3, $4, $5, $6)', [developer.fullName, Number(developer.workExperience), developer.position, developer.telephoneNumber, passport, Number(developer.salary)])
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
+
+const deleteDeveloper = (pn, callback) => {
+    db.any('delete from developers where personnel_number=$1', Number(pn))
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
+
+export default { getDevelopers, createDeveloper, deleteDeveloper}
 
 
 
 
 // exports.findOrderByID = (id, callback) => {
-//     db.any('select * from testers where personnel_number=$1', id)
+//     db.any('select * from developers where personnel_number=$1', id)
 //         .then(data => {
 //             callback(null, data);
 //         })

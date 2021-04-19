@@ -28,18 +28,19 @@ export const createTester = (req, res) => {
             console.log(err);
             return res.sendStatus(500);
         } else {
+            console.log('Создан тестировщик:', req.body.tester);
             res.sendStatus(200);
         }
     });
 };
 
 export const deleteTester = (req, res) => {
-    console.log(req.body)
     testers.deleteTester(req.body.pn, (err, data) => {
-        if (err) {  
+        if (err) {
             console.log(err);
             return res.sendStatus(500);
         } else {
+            console.log('Тестировщик с персональным номером', req.body.pn, 'был усешно удален...');
             res.sendStatus(200);
         }
     });

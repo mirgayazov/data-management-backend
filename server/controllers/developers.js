@@ -10,3 +10,27 @@ export const getDevelopers = (req, res) => {
         }
     });
 };
+
+export const createDeveloper = (req, res) => {
+    developers.createDeveloper(req.body.developer, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Создан программист:', req.body.developer);
+            res.sendStatus(200);
+        }
+    });
+};
+
+export const deleteDeveloper = (req, res) => {
+    developers.deleteDeveloper(req.body.pn, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Программист с персональным номером', req.body.pn, 'был усешно удален...');
+            res.sendStatus(200);
+        }
+    });
+};
