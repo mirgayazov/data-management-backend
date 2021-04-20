@@ -1,5 +1,5 @@
 import { getTesters, findTesterByID, createTester, deleteTester } from './controllers/testers.js';
-import { getOrders } from './controllers/orders.js';
+import { createOrder, deleteOrder, getOrders } from './controllers/orders.js';
 import { createDeveloper, getDevelopers, deleteDeveloper } from './controllers/developers.js';
 import { createCustomer, deleteCustomer, getCustomers } from './controllers/customers.js';
 import express, { json, urlencoded } from 'express';
@@ -22,6 +22,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/testers/:id', findTesterByID);
 app.get('/testers', getTesters);
 app.post('/testers', createTester);
 app.delete('/testers', deleteTester);
@@ -34,9 +35,10 @@ app.get('/developers', getDevelopers);
 app.post('/developers', createDeveloper);
 app.delete('/developers', deleteDeveloper);
 
-
-app.get('/testers/:id', findTesterByID);
 app.get('/orders', getOrders);
+app.post('/orders', createOrder);
+app.delete('/orders', deleteOrder);
+
 
 db.connect()
     .then((obj) => {

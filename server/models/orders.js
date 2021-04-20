@@ -10,43 +10,24 @@ const getOrders = (callback) => {
         });
 };
 
-export default { getOrders, }
+const createOrder = (order, callback) => {
+    db.any('insert into orders(name, customer_id, cost, technical_task, customer_feedback, order_type) values($1, $2, $3, $4, $5, $6)', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.orderType])
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
 
+const deleteOrder = (id, callback) => {
+    db.any('delete from orders where id=$1', Number(id))
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
 
-
-
-// exports.findOrderByID = (id, callback) => {
-//     db.any('select * from testers where personnel_number=$1', id)
-//         .then(data => {
-//             callback(null, data);
-//         })
-//         .catch(err => {
-//             callback(err, null);
-//         });
-// };
-
-// exports.createUser = (user, callback) => {
-//     client.query(
-//         "insert into users(name) values($1)",
-//         [user.name],
-//         (err, results) => {
-//             callback(err, results);
-//         }
-//     );
-// };
-
-// exports.updateUserName = (user, newName, callback) => {
-//     client.query(
-//         "update users set name=$1 where id=$2",
-//         [newName, user.id],
-//         (err, results) => {
-//             callback(err, results);
-//         }
-//     );
-// };
-
-// exports.deleteUser = (user, callback) => {
-//     client.query("delete from users where id=$1", [user.id], (err, results) => {
-//         callback(err, results);
-//     });
-// };
+export default { getOrders, createOrder, deleteOrder }

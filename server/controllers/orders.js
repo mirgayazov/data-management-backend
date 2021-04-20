@@ -10,3 +10,27 @@ export const getOrders = (req, res) => {
         }
     });
 };
+
+export const createOrder = (req, res) => {
+    orders.createOrder(req.body.order, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Создан заказ:', req.body.order);
+            res.sendStatus(200);
+        }
+    });
+};
+
+export const deleteOrder = (req, res) => {
+    orders.deleteOrder(req.body.id, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Заказ с номером', req.body.id, 'был усешно удален...');
+            res.sendStatus(200);
+        }
+    });
+};
