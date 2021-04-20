@@ -10,3 +10,27 @@ export const getCustomers = (req, res) => {
         }
     });
 };
+
+export const createCustomer = (req, res) => {
+    customers.createCustomer(req.body.customer, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Создан клиент:', req.body.customer);
+            res.sendStatus(200);
+        }
+    });
+};
+
+export const deleteCustomer = (req, res) => {
+    customers.deleteCustomer(req.body.id, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Клиент с номером', req.body.id, 'был усешно удален...');
+            res.sendStatus(200);
+        }
+    });
+};

@@ -1,13 +1,13 @@
 import { getTesters, findTesterByID, createTester, deleteTester } from './controllers/testers.js';
 import { getOrders } from './controllers/orders.js';
 import { createDeveloper, getDevelopers, deleteDeveloper } from './controllers/developers.js';
-import { getCustomers } from './controllers/customers.js';
+import { createCustomer, deleteCustomer, getCustomers } from './controllers/customers.js';
 import express, { json, urlencoded } from 'express';
 import pgPromise from 'pg-promise';
 
 const pgp = pgPromise({/* Init Options */ });
 const db = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
-const PORT = 3011;
+const port = 3011;
 const app = express();
 
 app.use(json());
@@ -23,14 +23,20 @@ app.use((req, res, next) => {
 });
 
 app.get('/testers', getTesters);
+app.post('/testers', createTester);
+app.delete('/testers', deleteTester);
+
+app.get('/customers', getCustomers);
+app.post('/customers', createCustomer);
+app.delete('/customers', deleteCustomer);
+
+app.get('/developers', getDevelopers);
+app.post('/developers', createDeveloper);
+app.delete('/developers', deleteDeveloper);
+
+
 app.get('/testers/:id', findTesterByID);
 app.get('/orders', getOrders);
-app.get('/developers', getDevelopers);
-app.get('/customers', getCustomers);
-app.post('/testers', createTester);
-app.post('/developers', createDeveloper);
-app.delete('/testers', deleteTester);
-app.delete('/developers', deleteDeveloper);
 
 db.connect()
     .then((obj) => {
@@ -38,8 +44,8 @@ db.connect()
         obj.done();
     })
     .then(() => {
-        app.listen(PORT, () => {
-            console.log(`API server started at: http://localhost:${PORT}`)
+        app.listen(port, () => {
+            console.log(`API server started at: http://localhost:${port}`)
         })
     })
     .catch(err => {
