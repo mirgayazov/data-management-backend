@@ -34,6 +34,18 @@ export const createTester = (req, res) => {
     });
 };
 
+export const updateTester = (req, res) => {
+    testers.updateTester(req.body.tester, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Обновлен тестировщик:', req.body.tester);
+            res.sendStatus(200);
+        }
+    });
+};
+
 export const deleteTester = (req, res) => {
     testers.deleteTester(req.body.pn, (err, data) => {
         if (err) {

@@ -9,5 +9,8 @@
     "start": "node server.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "python-shell": "^3.0.0"
+  }
 }

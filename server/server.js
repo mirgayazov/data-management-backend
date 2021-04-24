@@ -1,4 +1,4 @@
-import { getTesters, findTesterByID, createTester, deleteTester } from './controllers/testers.js';
+import { getTesters, findTesterByID, createTester, deleteTester, updateTester } from './controllers/testers.js';
 import { createOrder, deleteOrder, getOrders } from './controllers/orders.js';
 import { createDeveloper, getDevelopers, deleteDeveloper } from './controllers/developers.js';
 import { createCustomer, deleteCustomer, getCustomers } from './controllers/customers.js';
@@ -7,6 +7,7 @@ import pgPromise from 'pg-promise';
 
 const pgp = pgPromise({/* Init Options */ });
 const db = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
+
 const port = 3011;
 const app = express();
 
@@ -26,6 +27,7 @@ app.get('/testers/:id', findTesterByID);
 app.get('/testers', getTesters);
 app.post('/testers', createTester);
 app.delete('/testers', deleteTester);
+app.put('/testers', updateTester);
 
 app.get('/customers', getCustomers);
 app.post('/customers', createCustomer);
@@ -55,3 +57,5 @@ db.connect()
     });
 
 export default db
+
+
