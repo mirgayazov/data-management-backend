@@ -20,6 +20,16 @@ const createOrder = (order, callback) => {
         });
 };
 
+const updateOrder = (order, callback) => {
+    db.any('update orders set name=$1, customer_id=$2, cost=$3, technical_task=$4, customer_feedback=$5, order_type=$6 where id=$7', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.type, order.id])
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
+
 const deleteOrder = (id, callback) => {
     db.any('delete from orders where id=$1', Number(id))
         .then(data => {
@@ -30,4 +40,4 @@ const deleteOrder = (id, callback) => {
         });
 };
 
-export default { getOrders, createOrder, deleteOrder }
+export default { getOrders, createOrder, deleteOrder, updateOrder }

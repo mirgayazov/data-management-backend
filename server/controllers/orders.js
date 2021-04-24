@@ -23,6 +23,18 @@ export const createOrder = (req, res) => {
     });
 };
 
+export const updateOrder = (req, res) => {
+    orders.updateOrder(req.body.order, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Обновлен заказ:', req.body.order);
+            res.sendStatus(200);
+        }
+    });
+};
+
 export const deleteOrder = (req, res) => {
     orders.deleteOrder(req.body.id, (err, data) => {
         if (err) {
