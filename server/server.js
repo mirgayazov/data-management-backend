@@ -1,7 +1,7 @@
 import { getTesters, findTesterByID, createTester, deleteTester, updateTester } from './controllers/testers.js';
 import { createOrder, deleteOrder, getOrders, updateOrder } from './controllers/orders.js';
-import { createDeveloper, getDevelopers, deleteDeveloper } from './controllers/developers.js';
-import { createCustomer, deleteCustomer, getCustomers } from './controllers/customers.js';
+import { createDeveloper, getDevelopers, deleteDeveloper, updateDeveloper } from './controllers/developers.js';
+import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from './controllers/customers.js';
 import express, { json, urlencoded } from 'express';
 import pgPromise from 'pg-promise';
 
@@ -32,10 +32,12 @@ app.put('/testers', updateTester);
 app.get('/customers', getCustomers);
 app.post('/customers', createCustomer);
 app.delete('/customers', deleteCustomer);
+app.put('/customers', updateCustomer);
 
 app.get('/developers', getDevelopers);
 app.post('/developers', createDeveloper);
 app.delete('/developers', deleteDeveloper);
+app.put('/developers', updateDeveloper);
 
 app.get('/orders', getOrders);
 app.post('/orders', createOrder);

@@ -52,7 +52,7 @@ export const deleteTester = (req, res) => {
             console.log(err);
             return res.sendStatus(500);
         } else {
-            console.log('Тестировщик с персональным номером', req.body.pn, 'был усешно удален...');
+            console.log('Тестировщик с персональным номером', req.body.pn, 'был успешно удален...');
             res.sendStatus(200);
         }
     });

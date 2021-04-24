@@ -41,7 +41,7 @@ export const deleteOrder = (req, res) => {
             console.log(err);
             return res.sendStatus(500);
         } else {
-            console.log('Заказ с номером', req.body.id, 'был усешно удален...');
+            console.log('Заказ с номером', req.body.id, 'был успешно удален...');
             res.sendStatus(200);
         }
     });
