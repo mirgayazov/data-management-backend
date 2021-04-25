@@ -73,16 +73,19 @@ const deleteOrder = (id, callback) => {
 
 //schema = {orderId: any, designatedDevelopers: Array()}
 const appointDeveloper = (schema, callback) => {
-    db.tx(t => {
-        for (const pn of schema.designatedDevelopers) {
-            const q1 = t.any('select count(id) from order_developer where developer_personnel_number=$1 and order_id=$2', [Number(pn), Number(schema.orderId)]);
-            t.batch([q1]).then(res => {
-                if (Number(res[0][0].count) <= 0) {
-                    t.any('insert into order_developer(developer_personnel_number, order_id) values($1, $2)', [Number(pn), Number(schema.orderId)])
-                }
-            })
+    return new Promise((resolve, reject) => {
+        for (let i = 0; i < schema.designatedDevelopers.length; i++) {
+            db.any('select count(id) from order_developer where developer_personnel_number=$1 and order_id=$2', [Number(schema.designatedDevelopers[i]), Number(schema.orderId)])
+                .then(res => {
+                    let count = res[0].count
+                    if (count <= 0) {
+                        db.any('insert into order_developer(developer_personnel_number, order_id) values($1, $2)', [Number(schema.designatedDevelopers[i]), Number(schema.orderId)])
+                    }
+                    if (i === schema.designatedDevelopers.length - 1) {
+                        resolve(true)
+                    }
+                })
         }
-        return t.batch([true]);
     }).then(data => {
         callback(null, data);
     }).catch(err => {
@@ -92,16 +95,19 @@ const appointDeveloper = (schema, callback) => {
 
 //schema = {orderId: any, designatedTesters: Array()}
 const appointTester = (schema, callback) => {
-    db.tx(t => {
-        for (const pn of schema.designatedTesters) {
-            const q1 = t.any('select count(id) from order_tester where tester_personnel_number=$1 and order_id=$2', [Number(pn), Number(schema.orderId)]);
-            t.batch([q1]).then(res => {
-                if (Number(res[0][0].count) <= 0) {
-                    t.any('insert into order_tester(tester_personnel_number, order_id) values($1, $2)', [Number(pn), Number(schema.orderId)])
-                }
-            })
+    return new Promise((resolve, reject) => {
+        for (let i = 0; i < schema.designatedTesters.length; i++) {
+            db.any('select count(id) from order_tester where tester_personnel_number=$1 and order_id=$2', [Number(schema.designatedTesters[i]), Number(schema.orderId)])
+                .then(res => {
+                    let count = res[0].count
+                    if (count <= 0) {
+                        db.any('insert into order_tester(tester_personnel_number, order_id) values($1, $2)', [Number(schema.designatedTesters[i]), Number(schema.orderId)])
+                    }
+                    if (i === schema.designatedTesters.length - 1) {
+                        resolve(true)
+                    }
+                })
         }
-        return t.batch([true]);
     }).then(data => {
         callback(null, data);
     }).catch(err => {
