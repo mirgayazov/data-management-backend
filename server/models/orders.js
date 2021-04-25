@@ -21,7 +21,7 @@ const createOrder = (order, callback) => {
 };
 
 const updateOrder = (order, callback) => {
-    db.any('update orders set name=$1, customer_id=$2, cost=$3, technical_task=$4, customer_feedback=$5, order_type=$6 where id=$7', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.type, order.id])
+    db.any('update orders set name=$1, customer_id=$2, cost=$3, technical_task=$4, customer_feedback=$5, order_type=$6 where id=$7', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.orderType, order.id])
         .then(data => {
             callback(null, data);
         })

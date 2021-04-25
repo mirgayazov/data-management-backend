@@ -1,13 +1,30 @@
 import db from '../server.js';
 
 const getCustomers = (callback) => {
-    db.any('select * from customers')
-        .then(data => {
-            callback(null, data);
-        })
-        .catch(err => {
-            callback(err, null);
-        });
+    db.tx(t => {
+        return t.batch([t.any('select * from customers'), t.any('select id, name, customer_id from orders')])
+    }).then(res => {
+        let customers = res[0]
+        let orders = res[1]
+        let _customers = []
+        for (const customer of customers) {
+            let _orders = []
+            while (true) {
+                let indx = orders.findIndex(order => order.customer_id === customer.id)
+                if (indx === -1) break
+                else {
+                    _orders.push({ id: orders[indx].id, name: orders[indx].name })
+                    orders[indx].customer_id = null
+                }
+            }
+            _customers.push({ ...customer, orders: _orders })
+        }
+        return _customers
+    }).then(customers => {
+        callback(null, customers)
+    }).catch(err => {
+        callback(err, null)
+    });
 };
 
 const createCustomer = (customer, callback) => {
