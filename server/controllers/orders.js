@@ -59,6 +59,18 @@ export const appointDeveloper = (req, res) => {
     });
 };
 
+export const appointTester = (req, res) => {
+    orders.appointTester(req.body.schema, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Назначен(ы) тестировщики(и) на заказ с номером', req.body.schema.orderId, '...');
+            res.sendStatus(200);
+        }
+    });
+};
+
 export const removeDeveloperFromOrder = (req, res) => {
     orders.removeDeveloperFromOrder(req.body.schema, (err, data) => {
         if (err) {
@@ -66,6 +78,18 @@ export const removeDeveloperFromOrder = (req, res) => {
             return res.sendStatus(500);
         } else {
             console.log('С заказа с номером', req.body.schema.orderId, ' снят разрабочик с номером ', req.body.schema.developerId, '...');
+            res.sendStatus(200);
+        }
+    });
+};
+
+export const removeTesterFromOrder = (req, res) => {
+    orders.removeTesterFromOrder(req.body.schema, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('С заказа с номером', req.body.schema.orderId, ' снят тестировщик с номером ', req.body.schema.testerId, '...');
             res.sendStatus(200);
         }
     });

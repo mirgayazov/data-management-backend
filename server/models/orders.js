@@ -83,15 +83,20 @@ const appointDeveloper = (schema, callback) => {
     }).catch(err => {
         callback(err, null);
     });
-    // for (const pn of schema.designatedDevelopers) {
-    //     db.any('insert into order_developer(developer_personnel_number, order_id) values($1, $2)', [Number(pn), Number(schema.orderId)])
-    //         .then(data => {
-    //             callback(null, data);
-    //         })
-    //         .catch(err => {
-    //             callback(err, null);
-    //         });
-    // }
+};
+
+//schema = {orderId: any, designatedTesters: Array()}
+const appointTester = (schema, callback) => {
+    db.tx(t => {
+        for (const pn of schema.designatedTesters) {
+            t.any('insert into order_tester(tester_personnel_number, order_id) values($1, $2)', [Number(pn), Number(schema.orderId)])
+        }
+        return t.batch([true]);
+    }).then(data => {
+        callback(null, data);
+    }).catch(err => {
+        callback(err, null);
+    });
 };
 
 //schema = {orderId: any, developerId: any}
@@ -105,4 +110,15 @@ const removeDeveloperFromOrder = (schema, callback) => {
         });
 };
 
-export default { getOrders, createOrder, deleteOrder, updateOrder, appointDeveloper, removeDeveloperFromOrder }
+//schema = {orderId: any, testerId: any}
+const removeTesterFromOrder = (schema, callback) => {
+    db.any('delete from order_tester where tester_personnel_number=$1 and order_id=$2', [Number(schema.testerId), Number(schema.orderId)])
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
+
+export default { getOrders, createOrder, deleteOrder, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder }
