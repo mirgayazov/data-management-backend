@@ -1,5 +1,5 @@
 import { getTesters, findTesterByID, createTester, deleteTester, updateTester } from './controllers/testers.js';
-import { createOrder, deleteOrder, getOrders, updateOrder } from './controllers/orders.js';
+import { createOrder, deleteOrder, getOrders, updateOrder, appointDeveloper, removeDeveloperFromOrder } from './controllers/orders.js';
 import { createDeveloper, getDevelopers, deleteDeveloper, updateDeveloper } from './controllers/developers.js';
 import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from './controllers/customers.js';
 import express, { json, urlencoded } from 'express';
@@ -41,10 +41,10 @@ app.put('/developers', updateDeveloper);
 
 app.get('/orders', getOrders);
 app.post('/orders', createOrder);
+app.post('/orders/appoint-developer', appointDeveloper);
+app.post('/orders/remove-developer-from-order', removeDeveloperFromOrder);
 app.delete('/orders', deleteOrder);
 app.put('/orders', updateOrder);
-
-
 
 db.connect()
     .then((obj) => {

@@ -46,3 +46,27 @@ export const deleteOrder = (req, res) => {
         }
     });
 };
+
+export const appointDeveloper = (req, res) => {
+    orders.appointDeveloper(req.body.schema, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('Назначен(ы) разработчик(и) на заказ с номером', req.body.schema.orderId, '...');
+            res.sendStatus(200);
+        }
+    });
+};
+
+export const removeDeveloperFromOrder = (req, res) => {
+    orders.removeDeveloperFromOrder(req.body.schema, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            console.log('С заказа с номером', req.body.schema.orderId, ' снят разрабочик с номером ', req.body.schema.developerId, '...');
+            res.sendStatus(200);
+        }
+    });
+};
