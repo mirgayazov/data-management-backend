@@ -1,7 +1,6 @@
 import auth from '../models/auth.js';
 
 export const login = (req, res) => {
-    console.log(req.body.data)
     let { email, password } = req.body.data
     auth.login(email, password, (err, data) => {
         if (err) {
