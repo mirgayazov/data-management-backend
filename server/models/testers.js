@@ -25,7 +25,7 @@ const createTester = (tester, callback) => {
         series: tester.passportSeries,
         number: tester.passportNumber,
     }
-    db.any('insert into testers(full_name, test_method, work_experience, position, telephone_number, passport_details, salary) values($1, $2, $3, $4, $5, $6, $7)', [tester.fullName, tester.testMethod, Number(tester.workExperience), tester.position, tester.telephoneNumber, passport, Number(tester.salary)])
+    db.any('insert into testers(full_name, test_method, work_experience, position, telephone_number, passport_details, salary, email) values($1, $2, $3, $4, $5, $6, $7, $8)', [tester.fullName, tester.testMethod, Number(tester.workExperience), tester.position, tester.telephoneNumber, passport, Number(tester.salary), tester.email])
         .then(data => {
             callback(null, data);
         })
@@ -39,7 +39,7 @@ const updateTester = (tester, callback) => {
         series: tester.passportSeries,
         number: tester.passportNumber,
     }
-    db.any('update testers set full_name=$1, test_method=$2, work_experience=$3, position=$4, telephone_number=$5, passport_details=$6, salary=$7 where personnel_number=$8', [tester.fullName, tester.testMethod, Number(tester.workExperience), tester.position, tester.telephoneNumber, passport, Number(tester.salary), tester.personnel_number])
+    db.any('update testers set full_name=$1, test_method=$2, work_experience=$3, position=$4, telephone_number=$5, passport_details=$6, salary=$7, email=$8 where personnel_number=$9', [tester.fullName, tester.testMethod, Number(tester.workExperience), tester.position, tester.telephoneNumber, passport, Number(tester.salary), tester.email, tester.personnel_number])
         .then(data => {
             callback(null, data);
         })

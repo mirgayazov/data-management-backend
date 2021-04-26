@@ -15,7 +15,7 @@ const createDeveloper = (developer, callback) => {
         series: developer.passportSeries,
         number: developer.passportNumber,
     }
-    db.any('insert into developers(full_name, work_experience, position, telephone_number, passport_details, salary) values($1, $2, $3, $4, $5, $6)', [developer.fullName, Number(developer.workExperience), developer.position, developer.telephoneNumber, passport, Number(developer.salary)])
+    db.any('insert into developers(full_name, work_experience, position, telephone_number, passport_details, salary, email) values($1, $2, $3, $4, $5, $6, $7)', [developer.fullName, Number(developer.workExperience), developer.position, developer.telephoneNumber, passport, Number(developer.salary), developer.email])
         .then(data => {
             callback(null, data);
         })
@@ -29,7 +29,7 @@ const updateDeveloper = (developer, callback) => {
         series: developer.passportSeries,
         number: developer.passportNumber,
     }
-    db.any('update developers set full_name=$1, work_experience=$2, position=$3, telephone_number=$4, passport_details=$5, salary=$6 where personnel_number=$7', [developer.fullName, Number(developer.workExperience), developer.position, developer.telephoneNumber, passport, Number(developer.salary), developer.personnel_number])
+    db.any('update developers set full_name=$1, work_experience=$2, position=$3, telephone_number=$4, passport_details=$5, salary=$6, email=$7 where personnel_number=$8', [developer.fullName, Number(developer.workExperience), developer.position, developer.telephoneNumber, passport, Number(developer.salary), developer.email, developer.personnel_number])
         .then(data => {
             callback(null, data);
         })

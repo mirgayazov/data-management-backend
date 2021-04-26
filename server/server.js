@@ -64,4 +64,19 @@ db.connect()
 
 export default db
 
+// let fill = () => {
+//     for (let i = 0; i < 200; i++) {
+//         db.any('insert into order_developer(developer_personnel_number, order_id) values($1, $2)', [936 + i, 234 + i])
+//             .then(data => {
+//                 console.log('+')
+//             })
+//             .catch(err => {
+//                 console.log(err)
+
+//             });
+//     }
+// }
+
+// fill()
+
 

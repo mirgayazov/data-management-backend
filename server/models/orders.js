@@ -18,7 +18,9 @@ const getOrders = (callback) => {
                 if (indx === -1) break
                 else {
                     let dev = Developers.filter(developer => developer.personnel_number === developers_links[indx].developer_personnel_number)
-                    developers.push({ id: dev[0].personnel_number, name: dev[0].full_name })
+                    if (dev[0]) {
+                        developers.push({ id: dev[0].personnel_number, name: dev[0].full_name })
+                    }
                     developers_links[indx].order_id = null
                 }
             }
@@ -27,7 +29,9 @@ const getOrders = (callback) => {
                 if (indx === -1) break
                 else {
                     let tes = Testers.filter(tester => tester.personnel_number === testers_links[indx].tester_personnel_number)
-                    testers.push({ id: tes[0].personnel_number, name: tes[0].full_name })
+                    if (tes[0]) {
+                        testers.push({ id: tes[0].personnel_number, name: tes[0].full_name })
+                    }
                     testers_links[indx].order_id = null
                 }
             }
