@@ -1,4 +1,5 @@
 import db from '../server.js';
+import bcrypt from 'bcrypt'
 
 const getTesters = (callback) => {
     db.any('select * from testers')
@@ -27,7 +28,12 @@ const createTester = (tester, callback) => {
     }
     db.any('insert into testers(full_name, test_method, work_experience, position, telephone_number, passport_details, salary, email) values($1, $2, $3, $4, $5, $6, $7, $8)', [tester.fullName, tester.testMethod, Number(tester.workExperience), tester.position, tester.telephoneNumber, passport, Number(tester.salary), tester.email])
         .then(data => {
-            callback(null, data);
+            let password = tester.passportSeries + tester.passportNumber
+            bcrypt.hash(password, 10, (err, hash) => {
+                db.any('insert into users(login, password, position) values($1, $2, $3)', [tester.email, hash, 'tester']).then(data => {
+                    callback(null, data);
+                })
+            })
         })
         .catch(err => {
             callback(err, null);
