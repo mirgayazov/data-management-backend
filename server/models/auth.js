@@ -44,4 +44,16 @@ const login = (email, password, callback) => {
         });
 };
 
-export default { login }
+const setPassword = (email, newPassword, callback) => {
+    bcrypt.hash(newPassword, 10, (err, hash) => {
+        db.any('update users set password=$1 where login=$2', [hash, email])
+            .then(data => {
+                callback(null, data);
+            })
+            .catch(err => {
+                callback(err, null);
+            });
+    })
+};
+
+export default { login, setPassword }

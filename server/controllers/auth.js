@@ -1,4 +1,5 @@
 import auth from '../models/auth.js';
+import nodemailer from 'nodemailer'
 
 export const login = (req, res) => {
     let { email, password } = req.body.data
@@ -8,6 +9,85 @@ export const login = (req, res) => {
             res.json({ 'schema': data });
         } else {
             res.json({ 'schema': data });
+        }
+    });
+};
+
+export const setPassword = (req, res) => {
+    let { email, password } = req.query
+    auth.setPassword(email, password, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            return res.send(`<!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+            </head>
+            <body style="text-align: center;">
+                <h1>Пароль успешно изменен, скоро вы будете перенаправлены...</h1>
+                <script>
+                let red = () => {
+                    window.location.href = 'http://localhost:3001/'
+                }
+                    setTimeout(red, 3000)
+                </script>
+            </body>
+            </html>`)
+        }
+    });
+};
+
+export const resetPassword = (req, res) => {
+    let { email } = req.body.data
+
+    let makePassword = () => {
+        let password = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (let i = 0; i < 10; i++) {
+            password += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        return password;
+    }
+
+    let transport = nodemailer.createTransport({
+        host: 'smtp.mail.ru',
+        port: 465,
+        auth: {
+            user: 'rt8nrt@mail.ru',
+            pass: 'dsfg_SFSH24_rt1@#@$$#G$%H$^J%^KN$%J'
+        }
+    });
+
+    let newPassword = makePassword()
+
+    const message = {
+        from: 'rt8nrt@mail.ru',
+        to: email,
+        subject: 'Востановление пароля',
+        html: `<body>
+               <h2>Уважаемый пользователь, для смены пароля, перейдите по следующей ссылке:</h2>
+               <i>http://localhost:3011/auth/set-password/?email=${email}&password=${newPassword}</i>
+               <h3>в противном случае просто проигнорируйте данное письмо.</h3>
+               <h3>Новые данные для входа (в случае перехода по ссылке)</h3>
+               <ul>
+               <li>Логин: ${email}</li>
+               <li>Пароль: ${newPassword}</li>
+               </ul>
+               </body>`
+    };
+
+    transport.sendMail(message, function (err, info) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send('Мы отправили письмо с инструкциями на вашу почту, пожалуйста, проверьте папку спам.')
         }
     });
 };
