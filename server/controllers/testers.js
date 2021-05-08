@@ -15,9 +15,9 @@ export const saveStage = (req, res) => {
     testers.saveStage(req.body.data.schema, (err, data) => {
         if (err) {
             console.log(err);
-            // return res.sendStatus(500);
+            return res.sendStatus(500);
         } else {
-            // res.json({ 'testers': data });
+            return res.sendStatus(200);
         }
     });
 };

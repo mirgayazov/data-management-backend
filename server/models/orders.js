@@ -39,7 +39,27 @@ const getOrders = (callback) => {
         }
         return _neworders
     }).then(orders => {
-        callback(null, orders)
+        db.tx(t => {
+            let qs = new Array(orders.length)
+            for (let j = 0; j < orders.length; j++) {
+                const order = orders[j];
+                qs[j] = t.any('select * from stages where order_id=$1', order.id)
+            }
+            console.log(qs)
+            return t.batch(qs);
+        })
+            .then(data => {
+                let newOrders = []
+                for (let i = 0; i < orders.length; i++) {
+                    const order = orders[i];
+                    order.stages = data[i];
+                    newOrders.push(order)
+                }
+                callback(null, newOrders)
+            })
+            .catch(err => {
+                callback(err, null)
+            });
     }).catch(err => {
         callback(err, null)
     });
@@ -47,6 +67,16 @@ const getOrders = (callback) => {
 
 const createOrder = (order, callback) => {
     db.any('insert into orders(name, customer_id, cost, technical_task, customer_feedback, order_type) values($1, $2, $3, $4, $5, $6)', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.orderType])
+        .then(data => {
+            callback(null, data);
+        })
+        .catch(err => {
+            callback(err, null);
+        });
+};
+
+const getStages = (orderId, callback) => {
+    db.any('select * from stages where order_id=$1', orderId)
         .then(data => {
             callback(null, data);
         })
@@ -141,4 +171,4 @@ const removeTesterFromOrder = (schema, callback) => {
         });
 };
 
-export default { getOrders, createOrder, deleteOrder, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder }
+export default { getOrders, createOrder, deleteOrder, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder,getStages }

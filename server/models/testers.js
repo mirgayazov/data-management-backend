@@ -21,13 +21,32 @@ const getTesterProjects = (email, callback) => {
                 ))
                     .then(data => {
                         let orderIds = data.map(el => Number(el.order_id))
-                        // console.log(orderIds)
                         let queryText = 'select * from orders where id in '
                         let myIn = `( ${orderIds.join(',')} )`
                         queryText += myIn
                         db.any(queryText)
                             .then(orders => {
-                                resolve(orders)
+                                db.tx(t => {
+                                    let qs = new Array(orders.length)
+                                    for (let j = 0; j < orders.length; j++) {
+                                        const order = orders[j];
+                                        qs[j] = t.any('select * from stages where order_id=$1', order.id)
+                                    }
+                                    console.log(qs)
+                                    return t.batch(qs);
+                                })
+                                    .then(data => {
+                                        let newOrders = []
+                                        for (let i = 0; i < orders.length; i++) {
+                                            const order = orders[i];
+                                            order.stages = data[i];
+                                            newOrders.push(order)
+                                        }
+                                        resolve(newOrders)
+                                    })
+                                    .catch(error => {
+                                        reject(error)
+                                    });
                             })
                             .catch(err => {
                                 reject(err)
@@ -45,6 +64,71 @@ const getTesterProjects = (email, callback) => {
     }).catch(err => {
         console.log(err)
     })
+    // return new Promise((resolve, reject) => {
+    //     db.one('select personnel_number from testers where email=$1', email)
+    //         .then(data => {
+    //             let pn = data.personnel_number
+    //             // console.log(Number(pn))
+    //             db.any('select order_id from order_tester where tester_personnel_number=$1', Number(pn
+    //             ))
+    //                 .then(data => {
+    //                     let orderIds = data.map(el => Number(el.order_id))
+    //                     // console.log(orderIds)
+    //                     let queryText = 'select orders.*, stages.curator, stages.report, stages.adoption_date, stages.closing_date from orders left join stages on orders.id = stages.order_id where orders.id in '
+    //                     // let queryText2 = 'select * from stages where order_id in '
+    //                     let myIn = `( ${orderIds.join(',')} )`
+    //                     queryText += myIn
+    //                     // queryText2 += myIn
+    //                     db.any(queryText)
+    //                         .then(orders => {
+    //                             let newArr = []
+    //                             for (const order of orders) {
+    //                                 if (order.curator !== null) {
+    //                                     let schema = {
+    //                                         orderId: order.id,
+    //                                         stage: {
+    //                                             curator: order.curator,
+    //                                             report: order.report,
+    //                                             adoption_date: order.adoption_date,
+    //                                             closing_date: order.closing_date,
+    //                                         }
+    //                                     }
+    //                                     newArr.push(schema)
+    //                                 }
+    //                             }
+    //                             console.log(orders)
+    //                             // for (const item of newArr) {
+    //                             //     let 
+    //                             // }
+    //                             // console.log(newArr)
+    //                             // let newOrders = []
+    //                             // for (const order of orders) {
+    //                             //     db.any('select * from stages where order_id=$1', order.id)
+    //                             //         .then(data => {
+    //                             //             let newOrder = order
+    //                             //             newOrder.stages = data
+    //                             //             newOrders.push(newOrder)
+    //                             //         })
+    //                             // }
+    //                             // console.log(newOrders)
+    //                             // resolve(newOrders)
+    //                         })
+    //                         .catch(err => {
+    //                             reject(err)
+    //                         })
+    //                 })
+    //                 .catch(err => {
+    //                     callback(err, null);
+    //                 });
+    //         })
+    //         .catch(err => {
+    //             callback(err, null);
+    //         });
+    // }).then(orders => {
+    //     callback(null, orders)
+    // }).catch(err => {
+    //     console.log(err)
+    // })
 };
 
 const saveStage = (schema, callback) => {

@@ -11,6 +11,17 @@ export const getOrders = (req, res) => {
     });
 };
 
+export const getStages = (req, res) => {
+    orders.getStages(req.body.data.orderId, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            res.json({ 'stages': data });
+        }
+    });
+};
+
 export const createOrder = (req, res) => {
     orders.createOrder(req.body.order, (err, data) => {
         if (err) {
