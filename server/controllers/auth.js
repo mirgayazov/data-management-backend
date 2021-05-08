@@ -15,6 +15,7 @@ export const login = (req, res) => {
 
 export const setPassword = (req, res) => {
     let { email, password } = req.query
+    console.log( email, password)
     auth.setPassword(email, password, (err, data) => {
         if (err) {
             console.log(err);
@@ -72,14 +73,30 @@ export const resetPassword = (req, res) => {
         to: email,
         subject: 'Востановление пароля',
         html: `<body>
-               <h2>Уважаемый пользователь, для смены пароля, перейдите по следующей ссылке:</h2>
-               <i>http://localhost:3011/auth/set-password/?email=${email}&password=${newPassword}</i>
-               <h3>в противном случае просто проигнорируйте данное письмо.</h3>
-               <h3>Новые данные для входа (в случае перехода по ссылке)</h3>
+                <style>
+                .c {
+                    border: 1px solid #333; /* Рамка */
+                    display: inline-block;
+                    padding: 5px 15px; /* Поля */
+                    margin-left: 10px;
+                    text-decoration: none; /* Убираем подчёркивание */
+                    color: #000; /* Цвет текста */
+                }
+                .c:hover {
+                    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+                    background: linear-gradient(to bottom, #fcfff4, #e9e9ce); /* Градиент */
+                    color: #a00;
+                }
+                </style>
+               <h2>Уважаемый пользователь, вы действительно желаете сменить пароль?<a class="c" href="http://localhost:3011/auth/set-password/?email=${email}&password=${newPassword}" onclick='alert(2)'>Да</a></h2>
+               <div>
+               <h3>Новые данные для входа:</h3>
                <ul>
                <li>Логин: ${email}</li>
                <li>Пароль: ${newPassword}</li>
                </ul>
+               </div>
+               <h3>*в противном случае проигнорируйте данное письмо.</h3>
                </body>`
     };
 

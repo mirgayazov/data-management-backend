@@ -1,4 +1,4 @@
-import { getTesters, findTesterByID, createTester, deleteTester, updateTester } from './controllers/testers.js';
+import { getTesters, findTesterByID, createTester, deleteTester, updateTester, getTesterProjects, saveStage } from './controllers/testers.js';
 import { createOrder, deleteOrder, getOrders, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder } from './controllers/orders.js';
 import { createDeveloper, getDevelopers, deleteDeveloper, updateDeveloper } from './controllers/developers.js';
 import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from './controllers/customers.js';
@@ -33,6 +33,9 @@ app.get('/testers', getTesters);
 app.post('/testers', createTester);
 app.delete('/testers', deleteTester);
 app.put('/testers', updateTester);
+app.post('/tester/projects', getTesterProjects);
+
+app.post('/stages', saveStage);
 
 app.get('/customers', getCustomers);
 app.post('/customers', createCustomer);

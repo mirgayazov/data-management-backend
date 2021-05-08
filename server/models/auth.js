@@ -7,24 +7,47 @@ const login = (email, password, callback) => {
             if (res.hash) {
                 bcrypt.compare(password, res.hash, (err, result) => {
                     if (result === true) {
-                        db.one(`select full_name from ${res.position}s where email=$1`, email)
-                            .then(name => {
-                                let schema = {
-                                    resultCode: 0,
-                                    id: res.id,
-                                    name
-                                }
-                                callback(null, schema)
-                            })
-                            .catch(err => {
-                                let schema = {
-                                    resultCode: -1,
-                                }
-                                callback(null, schema)
-                            })
+                        if (res.position === 'manager') {
+                            db.one(`select login from users where login=$1`, email)
+                                .then(name => {
+                                    let schema = {
+                                        resultCode: 0,
+                                        id: res.id,
+                                        name,
+                                        position: res.position,
+                                    }
+                                    callback(null, schema)
+                                })
+                                .catch(err => {
+                                    let schema = {
+                                        resultCode: -1,
+                                        msg: 'query error'
+                                    }
+                                    callback(null, schema)
+                                })
+                        } else {
+                            db.one(`select full_name from ${res.position}s where email=$1`, email)
+                                .then(name => {
+                                    let schema = {
+                                        resultCode: 0,
+                                        id: res.id,
+                                        name,
+                                        position: res.position,
+                                    }
+                                    callback(null, schema)
+                                })
+                                .catch(err => {
+                                    let schema = {
+                                        resultCode: -1,
+                                        msg: err
+                                    }
+                                    callback(null, schema)
+                                })
+                        }
                     } else {
                         let schema = {
                             resultCode: -1,
+                            msg: 'compare failed'
                         }
                         callback(null, schema)
                     }

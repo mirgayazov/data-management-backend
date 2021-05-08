@@ -11,6 +11,29 @@ export const getTesters = (req, res) => {
     });
 };
 
+export const saveStage = (req, res) => {
+    testers.saveStage(req.body.data.schema, (err, data) => {
+        if (err) {
+            console.log(err);
+            // return res.sendStatus(500);
+        } else {
+            // res.json({ 'testers': data });
+        }
+    });
+};
+
+export const getTesterProjects = (req, res) => {
+    let email = req.body.data.email;
+    testers.getTesterProjects(email, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            res.json({ 'orders': data });
+        }
+    });
+};
+
 export const findTesterByID = (req, res) => {
     testers.findTesterByID(req.params.id, (err, data) => {
         if (err) {
