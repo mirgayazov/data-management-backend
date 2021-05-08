@@ -1,5 +1,6 @@
 import auth from '../models/auth.js';
 import nodemailer from 'nodemailer'
+import bcrypt from 'bcrypt'
 
 export const login = (req, res) => {
     let { email, password } = req.body.data
@@ -13,9 +14,27 @@ export const login = (req, res) => {
     });
 };
 
+export const changePassword = (req, res) => {
+    let schema = req.body.data.schema
+    if (schema.newPassword1 !== schema.newPassword2) {
+        res.json({ resultCode: -2, 'msg': 'Пароли не совпадают!' });
+    } else {
+        auth.setPassword(schema.email, schema.newPassword1, (err, data) => {
+            if (err) {
+                console.log(err);
+                res.json({ resultCode: -1, 'schema': data });
+            } else {
+                res.json({ resultCode: 0, 'schema': data });
+            }
+        });
+    }
+
+};
+
+
 export const setPassword = (req, res) => {
     let { email, password } = req.query
-    console.log( email, password)
+    console.log(email, password)
     auth.setPassword(email, password, (err, data) => {
         if (err) {
             console.log(err);
