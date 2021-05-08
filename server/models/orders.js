@@ -45,7 +45,6 @@ const getOrders = (callback) => {
                 const order = orders[j];
                 qs[j] = t.any('select * from stages where order_id=$1', order.id)
             }
-            console.log(qs)
             return t.batch(qs);
         })
             .then(data => {

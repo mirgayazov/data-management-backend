@@ -7,7 +7,7 @@ const login = (email, password, callback) => {
             if (res.hash) {
                 bcrypt.compare(password, res.hash, (err, result) => {
                     if (result === true) {
-                        if (res.position === 'manager') {
+                        if (res.position === 'manager' || res.position === 'admin') {
                             db.one(`select login from users where login=$1`, email)
                                 .then(name => {
                                     let schema = {
@@ -79,4 +79,16 @@ const setPassword = (email, newPassword, callback) => {
     })
 };
 
-export default { login, setPassword }
+const createStaff = (email, newPassword, position, callback) => {
+    bcrypt.hash(newPassword, 10, (err, hash) => {
+        db.any('insert into users(login, password, position) values($1,$2,$3)', [email, hash, position])
+            .then(data => {
+                callback(null, data);
+            })
+            .catch(err => {
+                callback(err, null);
+            });
+    })
+};
+
+export default { login, setPassword, createStaff }

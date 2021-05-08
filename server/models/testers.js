@@ -16,7 +16,6 @@ const getTesterProjects = (email, callback) => {
         db.one('select personnel_number from testers where email=$1', email)
             .then(data => {
                 let pn = data.personnel_number
-                // console.log(Number(pn))
                 db.any('select order_id from order_tester where tester_personnel_number=$1', Number(pn
                 ))
                     .then(data => {
@@ -32,7 +31,6 @@ const getTesterProjects = (email, callback) => {
                                         const order = orders[j];
                                         qs[j] = t.any('select * from stages where order_id=$1', order.id)
                                     }
-                                    console.log(qs)
                                     return t.batch(qs);
                                 })
                                     .then(data => {

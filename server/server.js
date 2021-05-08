@@ -4,7 +4,7 @@ import { createDeveloper, getDevelopers, deleteDeveloper, updateDeveloper } from
 import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from './controllers/customers.js';
 import express, { json, urlencoded } from 'express';
 import pgPromise from 'pg-promise';
-import { login, resetPassword, setPassword, changePassword } from './controllers/auth.js';
+import { login, resetPassword, setPassword, changePassword, createStaff } from './controllers/auth.js';
 
 const pgp = pgPromise({/* Init Options */ });
 const db = pgp('postgres://kamil:1809@localhost:5432/websiteDevelopment');
@@ -28,6 +28,7 @@ app.get('/auth/set-password', setPassword)
 app.post('/auth/login', login);
 app.post('/auth/reset-password', resetPassword);
 app.post('/auth/change-password', changePassword);
+app.post('/auth/create-staff', createStaff);
 
 app.get('/testers/:id', findTesterByID);
 app.get('/testers', getTesters);

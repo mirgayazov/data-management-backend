@@ -127,3 +127,82 @@ export const resetPassword = (req, res) => {
         }
     });
 };
+
+export const createStaff = (req, res) => {
+    let { email, position } = req.body.data.schema
+    let position2 = ''
+    if (position === 'manager') {
+        position2 = 'менеджера'
+    } else {
+        position2 = 'администратора'
+    }
+    // console.log(email, position)
+    let makePassword = () => {
+        let password = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (let i = 0; i < 10; i++) {
+            password += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        return password;
+    }
+
+    let transport = nodemailer.createTransport({
+        host: 'smtp.mail.ru',
+        port: 465,
+        auth: {
+            user: 'rt8nrt@mail.ru',
+            pass: 'dsfg_SFSH24_rt1@#@$$#G$%H$^J%^KN$%J'
+        }
+    });
+
+    let newPassword = makePassword()
+
+    const message = {
+        from: 'rt8nrt@mail.ru',
+        to: email,
+        subject: 'Добро пожаловать в компанию',
+        html: `<body>
+                <style>
+                .c {
+                    border: 1px solid #333; /* Рамка */
+                    display: inline-block;
+                    padding: 5px 15px; /* Поля */
+                    margin-left: 10px;
+                    text-decoration: none; /* Убираем подчёркивание */
+                    color: #000; /* Цвет текста */
+                }
+                .c:hover {
+                    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+                    background: linear-gradient(to bottom, #fcfff4, #e9e9ce); /* Градиент */
+                    color: #a00;
+                }
+                </style>
+               <h2>Уважаемый пользователь, рады приветствовать вас в нашей компании на позиции ${position2}!</h2>
+               <div>
+               <h3>Ваши данные для входа в систему:</h3>
+               <ul>
+               <li>Логин: ${email}</li>
+               <li>Пароль: ${newPassword}</li>
+               </ul>
+               </div>
+               </body>`
+    };
+
+    transport.sendMail(message, function (err, info) {
+        if (err) {
+            console.log(err)
+        } else {
+            auth.createStaff(email, newPassword, position, (err, data) => {
+                if (err) {
+                    console.log(err);
+                    res.json({ 'schema': data });
+                } else {
+                    res.json({ 'schema': data });
+                }
+            });
+            res.send('Мы отправили письмо с инструкциями на вашу почту, пожалуйста, проверьте папку спам.')
+        }
+    });
+};
