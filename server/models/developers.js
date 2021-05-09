@@ -3,8 +3,28 @@ import bcrypt from 'bcrypt'
 
 const getDevelopers = (callback) => {
     db.any('select * from developers')
-        .then(data => {
-            callback(null, data);
+        .then(developers => {
+            db.tx(t => {
+                let qs = new Array(developers.length)
+                for (let j = 0; j < developers.length; j++) {
+                    const developer = developers[j];
+                    qs[j] = t.any('select count(id) from order_developer where developer_personnel_number=$1', developer.personnel_number)
+                }
+                return t.batch(qs);
+            })
+                .then(data => {
+                    let newdevelopers = []
+                    for (let i = 0; i < developers.length; i++) {
+                        const developer = developers[i];
+                        developer.projectsCount = Number(data[i][0].count);
+                        newdevelopers.push(developer)
+                    }
+                    callback(null, newdevelopers)
+                })
+                .catch(err => {
+                    callback(err, null)
+                });
+            // callback(null, data);
         })
         .catch(err => {
             callback(err, null);

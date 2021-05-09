@@ -2,7 +2,7 @@ import db from '../server.js';
 
 const getOrders = (callback) => {
     db.tx(t => {
-        return t.batch([t.any('select * from orders'), t.any('select order_id, developer_personnel_number from order_developer'), t.any('select order_id, tester_personnel_number from order_tester'), t.any('select personnel_number, full_name from developers'), t.any('select personnel_number, full_name from testers')])
+        return t.batch([t.any('select * from orders'), t.any('select order_id, developer_personnel_number from order_developer'), t.any('select order_id, tester_personnel_number from order_tester'), t.any('select personnel_number, full_name, position from developers'), t.any('select personnel_number, full_name, position from testers')])
     }).then(res => {
         let orders = res[0]
         let developers_links = res[1]
@@ -19,7 +19,7 @@ const getOrders = (callback) => {
                 else {
                     let dev = Developers.filter(developer => developer.personnel_number === developers_links[indx].developer_personnel_number)
                     if (dev[0]) {
-                        developers.push({ id: dev[0].personnel_number, name: dev[0].full_name })
+                        developers.push({ id: dev[0].personnel_number, name: dev[0].full_name, position: dev[0].position })
                     }
                     developers_links[indx].order_id = null
                 }
@@ -30,7 +30,7 @@ const getOrders = (callback) => {
                 else {
                     let tes = Testers.filter(tester => tester.personnel_number === testers_links[indx].tester_personnel_number)
                     if (tes[0]) {
-                        testers.push({ id: tes[0].personnel_number, name: tes[0].full_name })
+                        testers.push({ id: tes[0].personnel_number, name: tes[0].full_name,  position: tes[0].position  })
                     }
                     testers_links[indx].order_id = null
                 }
@@ -170,4 +170,4 @@ const removeTesterFromOrder = (schema, callback) => {
         });
 };
 
-export default { getOrders, createOrder, deleteOrder, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder,getStages }
+export default { getOrders, createOrder, deleteOrder, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder, getStages }
