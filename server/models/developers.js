@@ -74,4 +74,38 @@ const deleteDeveloper = (pn, callback) => {
         });
 };
 
-export default { getDevelopers, createDeveloper, deleteDeveloper, updateDeveloper }
+const getDeveloperProjects = (email, callback) => {
+    return new Promise((resolve, reject) => {
+        db.one('select personnel_number from developers where email=$1', email)
+            .then(data => {
+                let pn = data.personnel_number
+                db.any('select order_id from order_developer where developer_personnel_number=$1', Number(pn
+                ))
+                    .then(data => {
+                        let orderIds = data.map(el => Number(el.order_id))
+                        let queryText = 'select * from orders where id in '
+                        let myIn = `( ${orderIds.join(',')} )`
+                        queryText += myIn
+                        db.any(queryText)
+                            .then(orders => {
+                                resolve(orders)
+                            })
+                            .catch(err => {
+                                reject(err)
+                            })
+                    })
+                    .catch(err => {
+                        callback(err, null);
+                    });
+            })
+            .catch(err => {
+                callback(err, null);
+            });
+    }).then(orders => {
+        callback(null, orders)
+    }).catch(err => {
+        console.log(err)
+    })
+};
+
+export default { getDevelopers, createDeveloper, deleteDeveloper, updateDeveloper, getDeveloperProjects }

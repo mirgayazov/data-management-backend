@@ -46,3 +46,15 @@ export const deleteDeveloper = (req, res) => {
         }
     });
 };
+
+export const getDeveloperProjects = (req, res) => {
+    let email = req.body.data.email;
+    developers.getDeveloperProjects(email, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            res.json({ 'orders': data });
+        }
+    });
+};

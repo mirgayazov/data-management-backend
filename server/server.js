@@ -1,6 +1,6 @@
 import { getTesters, findTesterByID, createTester, deleteTester, updateTester, getTesterProjects, saveStage } from './controllers/testers.js';
 import { createOrder, deleteOrder, getOrders, updateOrder, appointDeveloper, removeDeveloperFromOrder, appointTester, removeTesterFromOrder, getStages } from './controllers/orders.js';
-import { createDeveloper, getDevelopers, deleteDeveloper, updateDeveloper } from './controllers/developers.js';
+import { createDeveloper, getDevelopers, deleteDeveloper, updateDeveloper, getDeveloperProjects } from './controllers/developers.js';
 import { createCustomer, deleteCustomer, getCustomerProjects, getCustomers, updateCustomer } from './controllers/customers.js';
 import express, { json, urlencoded } from 'express';
 import pgPromise from 'pg-promise';
@@ -49,6 +49,8 @@ app.get('/developers', getDevelopers);
 app.post('/developers', createDeveloper);
 app.delete('/developers', deleteDeveloper);
 app.put('/developers', updateDeveloper);
+app.post('/developer/projects', getDeveloperProjects);
+
 
 app.get('/orders', getOrders);
 app.post('/order/stages', getStages);
