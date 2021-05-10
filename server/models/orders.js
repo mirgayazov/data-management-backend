@@ -30,7 +30,7 @@ const getOrders = (callback) => {
                 else {
                     let tes = Testers.filter(tester => tester.personnel_number === testers_links[indx].tester_personnel_number)
                     if (tes[0]) {
-                        testers.push({ id: tes[0].personnel_number, name: tes[0].full_name,  position: tes[0].position  })
+                        testers.push({ id: tes[0].personnel_number, name: tes[0].full_name, position: tes[0].position })
                     }
                     testers_links[indx].order_id = null
                 }
@@ -85,7 +85,7 @@ const getStages = (orderId, callback) => {
 };
 
 const updateOrder = (order, callback) => {
-    db.any('update orders set name=$1, customer_id=$2, cost=$3, technical_task=$4, customer_feedback=$5, order_type=$6 where id=$7', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.orderType, order.id])
+    db.any('update orders set name=$1, customer_id=$2, cost=$3, technical_task=$4, customer_feedback=$5, order_type=$6 where id=$7', [order.name, Number(order.customerId), Number(order.cost), order.technicalTask, order.customerFeedback, order.orderType, Number(order.id)])
         .then(data => {
             callback(null, data);
         })

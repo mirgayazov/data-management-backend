@@ -28,6 +28,33 @@ const getCustomers = (callback) => {
     });
 };
 
+const getCustomerProjects = (email, callback) => {
+    return new Promise((resolve, reject) => {
+        db.one('select id from customers where email=$1', email)
+            .then(data => {
+                let id = data.id
+                db.any('select * from orders where customer_id=$1', Number(id
+                ))
+                    .then(data => {
+                        let customerProjects = {
+                            orders: data
+                        }
+                        resolve(customerProjects)
+                    })
+                    .catch(err => {
+                        reject(err)
+                    });
+            })
+            .catch(err => {
+                callback(err, null);
+            });
+    }).then(customerProjects => {
+        callback(null, customerProjects)
+    }).catch(err => {
+        console.log(err)
+    })
+};
+
 const createCustomer = (customer, callback) => {
     const passport = {
         series: customer.passportSeries,
@@ -71,4 +98,4 @@ const deleteCustomer = (id, callback) => {
         });
 };
 
-export default { getCustomers, createCustomer, deleteCustomer, updateCustomer }
+export default { getCustomers, createCustomer, deleteCustomer, updateCustomer, getCustomerProjects }

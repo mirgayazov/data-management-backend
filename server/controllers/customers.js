@@ -11,6 +11,18 @@ export const getCustomers = (req, res) => {
     });
 };
 
+export const getCustomerProjects = (req, res) => {
+    let email = req.body.data.email
+    customers.getCustomerProjects(email, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+        } else {
+            res.json(data);
+        }
+    });
+};
+
 export const createCustomer = (req, res) => {
     customers.createCustomer(req.body.customer, (err, data) => {
         if (err) {
@@ -18,7 +30,7 @@ export const createCustomer = (req, res) => {
             return res.sendStatus(500);
         } else {
             console.log('Создан клиент:', req.body.customer);
-            res.sendStatus(200); 
+            res.sendStatus(200);
         }
     });
 };
