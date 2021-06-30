@@ -81,7 +81,7 @@ export const resetPassword = (req, res) => {
         port: 465,
         auth: {
             user: 'rt8nrt@mail.ru',
-            pass: 'dsfg_SFSH24_rt1@#@$$#G$%H$^J%^KN$%J'
+            pass: 'rthrthrthrthrthrth123'
         }
     });
 
